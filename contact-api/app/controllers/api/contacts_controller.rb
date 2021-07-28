@@ -9,7 +9,11 @@ module Api
 
     def show
       contact = Contact.where(id: params[:id]).first
-      render json: contact, status: 200
+      if contact
+        render json: contact, status: 200
+      else
+        render json: {errors: 'No such contact'}, status: :not_found
+      end
     end
 
     def create
