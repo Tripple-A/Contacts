@@ -12,6 +12,10 @@ const App = () => {
   const [showForm, setShowForm] = useState(false);
   const hideForm = () => setShowForm(false);
   const { isLoading, error, data } = useFetchContacts();
+  const getContact = (id) => {
+    let contacts = data.data;
+    return contacts.find((contact) => id == contact.id);
+  };
 
   return (
     <Router>
@@ -34,12 +38,18 @@ const App = () => {
           {isLoading && <Spinner animation="border" />}
         </div>
       </div>
-      <Switch>
-        {data && (
+
+      {data && (
+        <Switch>
           <Route path="/" exact render={() => <List data={data.data} />} />
-        )}
-        <Route path="/contact/:id" exact component={Details} />
-      </Switch>
+          <Route
+            path="/contact/:id"
+            exact
+            render={() => <Details getContact={getContact} />}
+          />
+          ;
+        </Switch>
+      )}
     </Router>
   );
 };
