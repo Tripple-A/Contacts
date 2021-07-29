@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { useQuery } from "react-query";
-import { fetchContacts } from "../api";
+import { useFetchContacts } from "../hooks";
 
 import Form from "../components/ContactForm";
 import List from "../components/ContactList";
@@ -10,9 +9,7 @@ import Spinner from "react-bootstrap/Spinner";
 const App = () => {
   const [showForm, setShowForm] = useState(false);
   const hideForm = () => setShowForm(false);
-  const { isLoading, error, data } = useQuery("fetchContacts", fetchContacts, {
-    staleTime: Infinity,
-  });
+  const { isLoading, error, data } = useFetchContacts();
 
   return (
     <div className="container">
