@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { fetchContacts } from "../api";
+import { fetchContacts, fetchHistory } from "../api";
 
 const useFetchContacts = () => {
   const { data, error, isLoading } = useQuery("fetchContacts", fetchContacts, {
@@ -7,4 +7,16 @@ const useFetchContacts = () => {
   });
   return { data, error, isLoading };
 };
-export { useFetchContacts };
+
+const useFetchHistory = (id) => {
+  const { data, error, isLoading } = useQuery(
+    "fetchHistory",
+    fetchHistory(id),
+    {
+      staleTime: Infinity,
+    }
+  );
+  return { data, error, isLoading };
+};
+
+export { useFetchContacts, useFetchHistory };
