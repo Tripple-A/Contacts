@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "react-router";
 import { useFetchHistory } from "../../hooks";
 import Spinner from "react-bootstrap/Spinner";
 import { Link } from "react-router-dom";
+import Form from "../ContactForm";
 
 const Details = ({ getContact, location }) => {
   let { id } = useParams();
@@ -15,23 +16,37 @@ const Details = ({ getContact, location }) => {
     return `${editDate[0]} at ${editDate[1]}`;
   };
   const updates = (audit) => {
-    for (const [key, value] of Object.entries(audit)) {
+    return Object.entries(audit).map(([key, value]) => {
       return (
         <div>
           <p>
-            {key}: From {value[0]} to {value[1]}{" "}
+            {key}: From {value[0]} to {value[1]}
           </p>
         </div>
       );
-    }
+    });
   };
+
+  // for (const [key, value] of Object.entries(audit)) {
+  //   return (
+  //     <div>
+  //       <p>
+  //         {key}: From {value[0]} to {value[1]}{" "}
+  //       </p>
+  //     </div>
+  //   );
+  // }
+  //};
+
+  const [edit, setEdit] = useState(false);
   return (
-    <div>
+    <div className="container">
       <div className="text-center">
-        <button>Edit</button>
+        <button onClick={() => setEdit(true)}>Edit</button>
         <button>Delete</button>
         <Link to="/">Home</Link>
       </div>
+      {edit && <Form current={contact} hideForm={() => setEdit(false)} edit />}
 
       <div className="text-left d-flex">
         <div className="mx-auto" style={{ border: "1px solid black" }}>

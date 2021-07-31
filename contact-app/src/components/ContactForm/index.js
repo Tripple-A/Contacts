@@ -1,15 +1,13 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
+import { useSaveOrUpdateContact } from "../../hooks";
+import Error from "../Notifications/error";
 
-const Form = ({ current, hideForm }) => {
+const Form = ({ current, hideForm, edit }) => {
   const [firstName, setFirstName] = useState(current?.first_name || "");
   const [lastName, setLastName] = useState(current?.last_name || "");
   const [email, setEmail] = useState(current?.email || "");
   const [phoneNumber, setPhoneNumber] = useState(current?.phone_number || "");
-  const [id, setId] = useState(current?.id || null);
-
-  const cancel = () => hideForm;
 
   // const update = () => {
   //   save({
@@ -19,6 +17,20 @@ const Form = ({ current, hideForm }) => {
   //   });
   //   cancel();
   // };
+
+  const { isSuccess, isError, error, mutate } = useSaveOrUpdateContact(edit);
+
+  const save = (e) => {
+    e.preventDefault();
+    const data = {
+      id: current?.id,
+      first_name: firstName,
+      last_name: lastName,
+      email,
+      phone_number: phoneNumber,
+    };
+    mutate(data);
+  };
 
   const handleChange = (e) => {
     switch (e.target.name) {
@@ -42,7 +54,9 @@ const Form = ({ current, hideForm }) => {
 
   return (
     <div>
-      <form className="row g-3 needs-validation" novalidate>
+      {isSuccess && hideForm()}
+      {isError && <Error data={error.response.data} />}
+      <form className="row g-3 needs-validation" novalidate onSubmit={save}>
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
           <input
             id="firstName"
@@ -88,14 +102,24 @@ const Form = ({ current, hideForm }) => {
             onChange={handleChange}
             required
           />
-          <button
-            className="mr-2 btn btn-primary mt-2"
-            // onClick={update}
-            type="submit"
-            data-testid="saveButton"
-          >
-            Save
-          </button>
+          {edit ? (
+            <button
+              className="mr-2 btn btn-primary mt-2"
+              // onClick={update}
+              type="submit"
+              data-testid="saveButton"
+            >
+              Update
+            </button>
+          ) : (
+            <button
+              className="mr-2 btn btn-primary mt-2"
+              type="submit"
+              data-testid="updateButton"
+            >
+              Save
+            </button>
+          )}
           <button
             className="btn btn-primary mt-2"
             type="button"

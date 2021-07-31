@@ -1,5 +1,5 @@
-import { useQuery } from "react-query";
-import { fetchContacts, fetchHistory } from "../api";
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import { fetchContacts, fetchHistory, saveContact, editContact } from "../api";
 
 const useFetchContacts = () => {
   const { data, error, isLoading } = useQuery("fetchContacts", fetchContacts);
@@ -13,4 +13,34 @@ const useFetchHistory = (id) => {
   return { data, error, isLoading };
 };
 
-export { useFetchContacts, useFetchHistory };
+const useSaveContact = () => {
+  const queryClient = useQueryClient();
+  const { isSuccess, error, isError, mutate } = useMutation(saveContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("fetchContacts");
+    },
+  });
+  return { isSuccess, error, isError, mutate };
+};
+
+const useUpdateContact = () => {
+  const queryClient = useQueryClient();
+  const { isSuccess, error, isError, mutate } = useMutation(editContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries();
+    },
+  });
+  return { isSuccess, error, isError, mutate };
+};
+
+const useSaveOrUpdateContact = (edit) => {
+  const update = useUpdateContact();
+  const save = useSaveContact();
+  if (edit) {
+    return update;
+  } else {
+    return save;
+  }
+};
+
+export { useFetchContacts, useFetchHistory, useSaveOrUpdateContact };
