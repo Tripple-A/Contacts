@@ -12,4 +12,8 @@ const editContact = async (data) => {
   await axios.put(`http://localhost:5000/api/contacts/${data.id}`, data);
 };
 
-export { fetchContacts, fetchHistory, saveContact, editContact };
+const deleteContact = async (id) => {
+  await axios.delete(`http://localhost:5000/api/contacts/${id}`);
+};
+
+export { fetchContacts, fetchHistory, saveContact, editContact, deleteContact };

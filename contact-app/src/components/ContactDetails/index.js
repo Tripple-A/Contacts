@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useFetchHistory } from "../../hooks";
+import { useDeleteContact, useFetchHistory } from "../../hooks";
 import Spinner from "react-bootstrap/Spinner";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import Form from "../ContactForm";
 
 const Details = ({ getContact, location }) => {
-  let { id } = useParams();
-
+  const { id } = useParams();
+  const [edit, setEdit] = useState(false);
+  const { isSuccess, mutate } = useDeleteContact();
   const contact = location ? location.contact : getContact(id);
   const { isLoading, error, data } = useFetchHistory(id);
   const history = data?.data;
@@ -27,24 +28,18 @@ const Details = ({ getContact, location }) => {
     });
   };
 
-  // for (const [key, value] of Object.entries(audit)) {
-  //   return (
-  //     <div>
-  //       <p>
-  //         {key}: From {value[0]} to {value[1]}{" "}
-  //       </p>
-  //     </div>
-  //   );
-  // }
-  //};
+  const deleteContact = () => {
+    const ans = window.confirm("Are you sure");
+    if (ans) mutate(id);
+  };
 
-  const [edit, setEdit] = useState(false);
   return (
     <div className="container">
       <div className="text-center">
         <button onClick={() => setEdit(true)}>Edit</button>
-        <button>Delete</button>
+        <button onClick={deleteContact}>Delete</button>
         <Link to="/">Home</Link>
+        {isSuccess && <Redirect to="/" />}
       </div>
       {edit && <Form current={contact} hideForm={() => setEdit(false)} edit />}
 
@@ -55,6 +50,8 @@ const Details = ({ getContact, location }) => {
           {error && <h3>There was an error loading the history</h3>}
           {data && (
             <div>
+              {!history.length && <h6>No edit history yet</h6>}
+
               {history.map((audit) => (
                 <div>
                   {updates(audit.audited_changes)}

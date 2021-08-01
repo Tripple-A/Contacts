@@ -8,16 +8,6 @@ const Form = ({ current, hideForm, edit }) => {
   const [lastName, setLastName] = useState(current?.last_name || "");
   const [email, setEmail] = useState(current?.email || "");
   const [phoneNumber, setPhoneNumber] = useState(current?.phone_number || "");
-
-  // const update = () => {
-  //   save({
-  //     firstName,
-  //     favColor,
-  //     captureDate,
-  //   });
-  //   cancel();
-  // };
-
   const { isSuccess, isError, error, mutate } = useSaveOrUpdateContact(edit);
 
   const save = (e) => {

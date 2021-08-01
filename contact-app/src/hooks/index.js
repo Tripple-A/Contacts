@@ -1,5 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from "react-query";
-import { fetchContacts, fetchHistory, saveContact, editContact } from "../api";
+import {
+  fetchContacts,
+  fetchHistory,
+  saveContact,
+  editContact,
+  deleteContact,
+} from "../api";
 
 const useFetchContacts = () => {
   const { data, error, isLoading } = useQuery("fetchContacts", fetchContacts);
@@ -36,11 +42,22 @@ const useUpdateContact = () => {
 const useSaveOrUpdateContact = (edit) => {
   const update = useUpdateContact();
   const save = useSaveContact();
-  if (edit) {
-    return update;
-  } else {
-    return save;
-  }
+  return edit ? update : save;
 };
 
-export { useFetchContacts, useFetchHistory, useSaveOrUpdateContact };
+const useDeleteContact = () => {
+  const queryClient = useQueryClient();
+  const { isSuccess, error, isError, mutate } = useMutation(deleteContact, {
+    onSuccess: () => {
+      queryClient.invalidateQueries("fetchContacts");
+    },
+  });
+  return { isSuccess, error, isError, mutate };
+};
+
+export {
+  useFetchContacts,
+  useFetchHistory,
+  useSaveOrUpdateContact,
+  useDeleteContact,
+};
