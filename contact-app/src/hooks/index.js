@@ -58,6 +58,8 @@ const useDeleteContact = () => {
 export {
   useFetchContacts,
   useFetchHistory,
+  useSaveContact,
+  useUpdateContact,
   useSaveOrUpdateContact,
   useDeleteContact,
 };

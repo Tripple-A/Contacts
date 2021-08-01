@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { useSaveOrUpdateContact } from "../../hooks";
 import Error from "../Notifications/error";
 
-const Form = ({ current, hideForm, edit }) => {
+const Form = ({ current, hideForm, edit, saveContact }) => {
   const [details, setDetails] = useState({
     firstName: current?.first_name || "",
     lastName: current?.last_name || "",
@@ -11,7 +10,7 @@ const Form = ({ current, hideForm, edit }) => {
     phoneNumber: current?.phone_number || "",
   });
   const { firstName, lastName, email, phoneNumber } = details;
-  const { isSuccess, isError, error, mutate } = useSaveOrUpdateContact(edit);
+  const { isSuccess, isError, error, mutate } = saveContact;
 
   const save = (e) => {
     e.preventDefault();
@@ -26,10 +25,8 @@ const Form = ({ current, hideForm, edit }) => {
   };
 
   const handleChange = (e) => {
-    console.log("in the form", e.target.value, e.target.name);
-    setDetails((prevDetails) => {
-      return { ...prevDetails, ...{ [e.target.name]: e.target.value } };
-    });
+    const { name, value } = e.target;
+    setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
 
   return (
@@ -38,7 +35,6 @@ const Form = ({ current, hideForm, edit }) => {
       {isError && <Error data={error.response.data} />}
       <form className="row g-3 needs-validation" novalidate onSubmit={save}>
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
-          <label htmlFor="firstName">first name </label>
           <input
             id="firstName"
             data-testid="firstname-field"
@@ -46,7 +42,7 @@ const Form = ({ current, hideForm, edit }) => {
             placeholder="First name"
             className="form-control"
             type="text"
-            defaultValue={firstName}
+            value={firstName}
             onChange={(e) => handleChange(e)}
             minLength="3"
             maxLength="25"
@@ -59,7 +55,7 @@ const Form = ({ current, hideForm, edit }) => {
             placeholder="Last name"
             className="form-control"
             type="text"
-            defaultValue={lastName}
+            value={lastName}
             onChange={(e) => handleChange(e)}
             minLength="3"
             maxLength="25"
@@ -87,23 +83,13 @@ const Form = ({ current, hideForm, edit }) => {
             onChange={handleChange}
             required
           />
-          {edit ? (
-            <button
-              className="mr-2 btn btn-primary mt-2"
-              type="submit"
-              data-testid="saveButton"
-            >
-              Update
-            </button>
-          ) : (
-            <button
-              className="mr-2 btn btn-primary mt-2"
-              type="submit"
-              data-testid="updateButton"
-            >
-              Save
-            </button>
-          )}
+          <button
+            className="mr-2 btn btn-primary mt-2"
+            type="submit"
+            data-testid="save-button"
+          >
+            {edit ? "Update" : "Save"}
+          </button>
           <button
             className="btn btn-primary mt-2"
             type="button"

@@ -1,6 +1,10 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
-import { useDeleteContact, useFetchHistory } from "../../hooks";
+import {
+  useDeleteContact,
+  useFetchHistory,
+  useUpdateContact,
+} from "../../hooks";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, Redirect } from "react-router-dom";
 import Form from "../ContactForm";
@@ -16,6 +20,7 @@ const Details = ({ getContact, location }) => {
     let editDate = date.split(/[\TZ,]+/);
     return `${editDate[0]} at ${editDate[1]}`;
   };
+  const saveContact = useUpdateContact();
   const updates = (audit) => {
     return Object.entries(audit).map(([key, value]) => {
       return (
@@ -41,7 +46,14 @@ const Details = ({ getContact, location }) => {
         <Link to="/">Home</Link>
         {isSuccess && <Redirect to="/" />}
       </div>
-      {edit && <Form current={contact} hideForm={() => setEdit(false)} edit />}
+      {edit && (
+        <Form
+          current={contact}
+          hideForm={() => setEdit(false)}
+          edit
+          saveContact={saveContact}
+        />
+      )}
 
       <div className="text-left d-flex">
         <div className="mx-auto" style={{ border: "1px solid black" }}>

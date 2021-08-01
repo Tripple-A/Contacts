@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import Form from "../ContactForm";
+import { useSaveContact } from "../../hooks";
 
 const List = ({ data }) => {
   const [showForm, setShowForm] = useState(false);
+  const saveContact = useSaveContact();
   return (
     <div className="mx-auto text-center container">
       <h1>Our contact list</h1>
@@ -16,7 +18,9 @@ const List = ({ data }) => {
         {" "}
         Add Contact
       </Button>
-      {showForm && <Form hideForm={() => setShowForm(false)} />}
+      {showForm && (
+        <Form hideForm={() => setShowForm(false)} saveContact={saveContact} />
+      )}
 
       <div>
         {data.map((contact) => (
