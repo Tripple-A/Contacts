@@ -8,7 +8,11 @@ const List = ({ data }) => {
   return (
     <div className="mx-auto text-center container">
       <h1>Our contact list</h1>
-      <Button onClick={() => setShowForm(true)} className="m-4">
+      <Button
+        onClick={() => setShowForm(true)}
+        className="m-4"
+        data-testid="addButton"
+      >
         {" "}
         Add Contact
       </Button>
@@ -20,7 +24,7 @@ const List = ({ data }) => {
             to={{ pathname: `/contact/${contact.id}`, contact: contact }}
             key={contact.id}
           >
-            <p>
+            <p data-testid="contactName">
               {contact.first_name} {contact.last_name}
             </p>
           </Link>

@@ -4,10 +4,13 @@ import { useSaveOrUpdateContact } from "../../hooks";
 import Error from "../Notifications/error";
 
 const Form = ({ current, hideForm, edit }) => {
-  const [firstName, setFirstName] = useState(current?.first_name || "");
-  const [lastName, setLastName] = useState(current?.last_name || "");
-  const [email, setEmail] = useState(current?.email || "");
-  const [phoneNumber, setPhoneNumber] = useState(current?.phone_number || "");
+  const [details, setDetails] = useState({
+    firstName: current?.first_name || "",
+    lastName: current?.last_name || "",
+    email: current?.email || "",
+    phoneNumber: current?.phone_number || "",
+  });
+  const { firstName, lastName, email, phoneNumber } = details;
   const { isSuccess, isError, error, mutate } = useSaveOrUpdateContact(edit);
 
   const save = (e) => {
@@ -23,23 +26,10 @@ const Form = ({ current, hideForm, edit }) => {
   };
 
   const handleChange = (e) => {
-    switch (e.target.name) {
-      case "firstName":
-        setFirstName(e.target.value);
-        break;
-      case "lastName":
-        setLastName(e.target.value);
-        break;
-      case "email":
-        setEmail(e.target.value);
-        break;
-      case "phoneNumber":
-        setPhoneNumber(e.target.value);
-        break;
-      default:
-        return null;
-    }
-    return null;
+    console.log("in the form", e.target.value, e.target.name);
+    setDetails((prevDetails) => {
+      return { ...prevDetails, ...{ [e.target.name]: e.target.value } };
+    });
   };
 
   return (
@@ -48,13 +38,15 @@ const Form = ({ current, hideForm, edit }) => {
       {isError && <Error data={error.response.data} />}
       <form className="row g-3 needs-validation" novalidate onSubmit={save}>
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
+          <label htmlFor="firstName">first name </label>
           <input
             id="firstName"
+            data-testid="firstname-field"
             name="firstName"
             placeholder="First name"
             className="form-control"
             type="text"
-            value={firstName}
+            defaultValue={firstName}
             onChange={(e) => handleChange(e)}
             minLength="3"
             maxLength="25"
@@ -62,11 +54,12 @@ const Form = ({ current, hideForm, edit }) => {
           />
           <input
             id="lastName"
+            data-testid="lastname-field"
             name="lastName"
             placeholder="Last name"
             className="form-control"
             type="text"
-            value={lastName}
+            defaultValue={lastName}
             onChange={(e) => handleChange(e)}
             minLength="3"
             maxLength="25"
@@ -74,6 +67,7 @@ const Form = ({ current, hideForm, edit }) => {
           />
           <input
             id="email"
+            data-testid="email-field"
             className="form-control"
             placeholder="Email"
             type="email"
@@ -84,6 +78,7 @@ const Form = ({ current, hideForm, edit }) => {
           />
           <input
             id="phoneNumber"
+            data-testid="phone-field"
             className="form-control"
             type="tel"
             placeholder="Phone number"
@@ -95,7 +90,6 @@ const Form = ({ current, hideForm, edit }) => {
           {edit ? (
             <button
               className="mr-2 btn btn-primary mt-2"
-              // onClick={update}
               type="submit"
               data-testid="saveButton"
             >

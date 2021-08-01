@@ -14,7 +14,6 @@ const Error = ({ data }) => {
   };
   return (
     <div className="alert alert-danger text-center">
-      There is an error:
       {showErrors(data.error)}
     </div>
   );

@@ -39,7 +39,7 @@ module Api
     end
 
     def history
-      audits = @contact.audits.select(:audited_changes, :created_at)
+      audits = @contact.audits.pluck_to_hash(:audited_changes, :created_at)
       render json: audits, status: 200
     end
 
