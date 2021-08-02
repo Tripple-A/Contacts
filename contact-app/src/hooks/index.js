@@ -39,12 +39,6 @@ const useUpdateContact = () => {
   return { isSuccess, error, isError, mutate };
 };
 
-const useSaveOrUpdateContact = (edit) => {
-  const update = useUpdateContact();
-  const save = useSaveContact();
-  return edit ? update : save;
-};
-
 const useDeleteContact = () => {
   const queryClient = useQueryClient();
   const { isSuccess, error, isError, mutate } = useMutation(deleteContact, {
@@ -60,6 +54,5 @@ export {
   useFetchHistory,
   useSaveContact,
   useUpdateContact,
-  useSaveOrUpdateContact,
   useDeleteContact,
 };

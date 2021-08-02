@@ -96,7 +96,9 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/react-hooks": "^7.0.1",
     "jest": "^26.6.3",
+    "nock": "^13.1.1",
     "prettier": "2.3.2",
     "react-test-renderer": "^17.0.2"
   },

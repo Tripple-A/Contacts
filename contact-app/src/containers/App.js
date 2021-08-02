@@ -24,7 +24,7 @@ const App = () => {
         </div>
         <div className="mx-auto text-center">
           {error && <h3>There was an error loading the contacts</h3>}
-          {isLoading && <Spinner animation="border" />}
+          {isLoading && <Spinner data-testid="spinner" animation="border" />}
         </div>
       </div>
 

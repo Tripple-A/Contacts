@@ -78,5 +78,5 @@ test("form will not submit if all fields are not filled", () => {
   expect(email.value).toBe("soft@dev.com");
   const saveButton = getByTestId("save-button");
   fireEvent.click(saveButton);
-  expect(handleSubmit).not.toHaveBeenCalledWith;
+  expect(handleSubmit).not.toHaveBeenCalled;
 });

@@ -38,11 +38,19 @@ const Details = ({ getContact, location }) => {
     if (ans) mutate(id);
   };
 
+  if (!contact) {
+    return <div>No such contact exists</div>;
+  }
+
   return (
     <div className="container">
       <div className="text-center">
-        <button onClick={() => setEdit(true)}>Edit</button>
-        <button onClick={deleteContact}>Delete</button>
+        <button data-testid="edit-button" onClick={() => setEdit(true)}>
+          Edit
+        </button>
+        <button data-testid="delete-button" onClick={deleteContact}>
+          Delete
+        </button>
         <Link to="/">Home</Link>
         {isSuccess && <Redirect to="/" />}
       </div>
@@ -60,7 +68,7 @@ const Details = ({ getContact, location }) => {
           <h5> Edit History</h5>
           {isLoading && <Spinner animation="border" />}
           {error && <h3>There was an error loading the history</h3>}
-          {data && (
+          {history && (
             <div>
               {!history.length && <h6>No edit history yet</h6>}
 

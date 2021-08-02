@@ -1,20 +1,21 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter } from "react-router";
-
 import List from "../components/ContactList";
 
 const data = [{ id: 1, first_name: "Hello", last_name: "Factorial" }];
 const queryClient = new QueryClient();
-
-test("renders and shows all embedded fields", () => {
-  const { getByTestId } = render(
+const renderList = () =>
+  render(
     <QueryClientProvider client={queryClient}>
       <MemoryRouter>
         <List data={data} />
       </MemoryRouter>
     </QueryClientProvider>
   );
+
+test("renders and shows all embedded fields", () => {
+  const { getByTestId } = renderList();
   const heading = screen.getByText(/Our contact list/i);
   expect(heading).toBeInTheDocument();
   expect(getByTestId("addButton")).toHaveTextContent("Add Contact");
@@ -23,13 +24,7 @@ test("renders and shows all embedded fields", () => {
 });
 
 test("renders the add form to add new contact on add button click", () => {
-  const { getByTestId } = render(
-    <QueryClientProvider client={queryClient}>
-      <MemoryRouter>
-        <List data={data} />
-      </MemoryRouter>
-    </QueryClientProvider>
-  );
+  const { getByTestId } = renderList();
   const addButton = getByTestId("addButton");
   fireEvent.click(addButton);
   expect(getByTestId("firstname-field")).toBeInTheDocument();
