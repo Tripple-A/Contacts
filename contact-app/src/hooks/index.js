@@ -8,8 +8,7 @@ import {
 } from "../api";
 
 const useFetchContacts = () => {
-  const { data, error, isLoading } = useQuery("fetchContacts", fetchContacts);
-  return { data, error, isLoading };
+  return useQuery("fetchContacts", () => fetchContacts());
 };
 
 const useFetchHistory = (id) => {

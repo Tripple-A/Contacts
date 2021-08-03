@@ -8,4 +8,9 @@ class Contact < ApplicationRecord
   validates :phone_number,
             presence: true, format: { with: /\A+?\d+\z/ }
   audited on: :update
+  scope :arranged, -> { order(first_name: :asc) }
+
+  def audit_history
+    audits.descending.pluck_to_hash(:audited_changes, :created_at)
+  end
 end

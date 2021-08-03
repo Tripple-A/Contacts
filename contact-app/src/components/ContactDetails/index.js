@@ -18,7 +18,6 @@ const Details = ({ getContact, location }) => {
   const { isSuccess, mutate } = useDeleteContact();
   const saveContact = useUpdateContact();
   const { isLoading, error, data } = useFetchHistory(id);
-  const history = data?.data;
   const dateSeperator = (date) => {
     const editDate = date.split(/[\TZ,]+/);
     return `${editDate[0]} at ${editDate[1]}`;
@@ -67,11 +66,11 @@ const Details = ({ getContact, location }) => {
           <h5> Edit History</h5>
           {isLoading && <Spinner animation="border" />}
           {error && <h3>There was an error loading the history</h3>}
-          {history && (
+          {data && (
             <div>
-              {!history.length && <h6>No edit history yet</h6>}
+              {!data.length && <h6>No edit history yet</h6>}
 
-              {history.map((audit) => (
+              {data.map((audit) => (
                 <div>
                   {updates(audit.audited_changes)}
                   <p>Date: {dateSeperator(audit.created_at)}</p>

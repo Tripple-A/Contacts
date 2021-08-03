@@ -5,7 +5,7 @@ module Api
     before_action :set_contact, only: %i[show update destroy history]
 
     def index
-      contacts = Contact.all
+      contacts = Contact.arranged
       render json: contacts, status: 200
     end
 
@@ -39,7 +39,7 @@ module Api
     end
 
     def history
-      audits = @contact.audits.pluck_to_hash(:audited_changes, :created_at)
+      audits = @contact.audit_history
       render json: audits, status: 200
     end
 

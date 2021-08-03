@@ -7,8 +7,7 @@ import Details from "../components/ContactDetails";
 const App = () => {
   const { isLoading, error, data } = useFetchContacts();
   const getContact = (id) => {
-    let contacts = data.data;
-    return contacts.find((contact) => id == contact.id);
+    return data.find((contact) => id == contact.id);
   };
 
   return (
@@ -30,7 +29,7 @@ const App = () => {
 
       {data && (
         <Switch>
-          <Route path="/" exact render={() => <List data={data.data} />} />
+          <Route path="/" exact render={() => <List data={data} />} />
           <Route
             path="/contact/:id"
             exact
