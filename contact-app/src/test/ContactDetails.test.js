@@ -2,7 +2,13 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { MemoryRouter, Route } from "react-router";
 import Details from "../components/ContactDetails";
-import { useUpdateContact } from "../hooks";
+import { useDeleteContact, useUpdateContact, useFetchHistory } from "../hooks";
+
+jest.mock("../hooks", () => ({
+  useUpdateContact: jest.fn(),
+  useDeleteContact: jest.fn(),
+  useFetchHistory: jest.fn(),
+}));
 
 const data = {
   id: 1,
@@ -23,7 +29,18 @@ const renderDetails = (component) =>
     </QueryClientProvider>
   );
 
+test("uses the getContact fxn and route id to fetch contact", () => {
+  useDeleteContact.mockImplementation(() => ({ isLoading: true }));
+  useFetchHistory.mockImplementation(() => ({ isLoading: true }));
+
+  renderDetails(<Details getContact={getContact} />);
+  expect(getContact).toHaveBeenCalledWith("1");
+});
+
 test("renders and shows all embedded text when location params are provided", () => {
+  useDeleteContact.mockImplementation(() => ({ isLoading: true }));
+  useFetchHistory.mockImplementation(() => ({ data: { data: [] } }));
+
   renderDetails(
     <Details location={{ contact: data }} getContact={getContact} />
   );
@@ -33,18 +50,27 @@ test("renders and shows all embedded text when location params are provided", ()
   expect(screen.getByText(/Last name: Factorial/i)).toBeInTheDocument();
   expect(screen.getByText(/Email: hello@factorial.com/i)).toBeInTheDocument();
   expect(screen.getByText(/Phone number: 0987654523/i)).toBeInTheDocument();
+  expect(screen.getByText("No edit history yet")).toBeInTheDocument();
 });
 
-test("uses the getContact fxn and routeid to fetch contact", () => {
-  renderDetails(<Details getContact={getContact} />);
-  expect(getContact).toHaveBeenCalledWith("1");
-});
-
-test("successfully edits a contact", () => {
-  const { getByTestId } = renderDetails(
-    <Details location={{ contact: data }} />
-  );
+test("shows edit form containing contact details and calls update function", () => {
+  useDeleteContact.mockImplementation(() => ({ isLoading: true }));
+  useFetchHistory.mockImplementation(() => ({ isLoading: true }));
+  useUpdateContact.mockImplementation(() => ({ mutate: jest.fn() }));
+  renderDetails(<Details location={{ contact: data }} edit />);
   expect(screen.getByText(/First name: Hello/i)).toBeInTheDocument();
-  const editButton = getByTestId("edit-button");
+  const editButton = screen.getByTestId("edit-button");
+  expect(useUpdateContact).toHaveBeenCalledTimes(1);
   fireEvent.click(editButton);
+  expect(useUpdateContact).toHaveBeenCalledTimes(2);
+});
+
+test("it redirects to the Home Page after deleting a contact", () => {
+  useDeleteContact.mockImplementation(() => ({ isSuccess: true }));
+  useFetchHistory.mockImplementation(() => ({ isLoading: true }));
+  useUpdateContact.mockImplementation(() => ({ mutate: jest.fn() }));
+  renderDetails(<Details location={{ contact: data }} edit />);
+  expect(screen.queryByText("First name")).toBeNull;
+  expect(screen.queryByText("Edit History")).toBeNull;
+  expect(window.location.pathname).toBe("/");
 });

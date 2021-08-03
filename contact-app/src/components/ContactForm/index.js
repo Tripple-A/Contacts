@@ -10,6 +10,11 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
     phoneNumber: current?.phone_number || "",
   });
   const { firstName, lastName, email, phoneNumber } = details;
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+  };
+
   const { isSuccess, isError, error, mutate } = saveContact;
 
   const save = (e) => {
@@ -23,15 +28,14 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
     };
     mutate(data);
   };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+  const doHideForm = () => {
+    hideForm();
+    saveContact.reset();
   };
 
   return (
     <div>
-      {isSuccess && hideForm()}
+      {isSuccess && doHideForm()}
       {isError && <Error data={error.response.data} />}
       <form className="row g-3 needs-validation" novalidate onSubmit={save}>
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
@@ -93,7 +97,7 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
           <button
             className="btn btn-primary mt-2"
             type="button"
-            onClick={hideForm}
+            onClick={doHideForm}
           >
             Cancel
           </button>

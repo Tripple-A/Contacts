@@ -17,11 +17,11 @@ const renderApp = () =>
 
 test("renders, shows the app name successfully and begins loading contacts", () => {
   useFetchContacts.mockImplementation(() => ({ isLoading: true }));
-  const { getByTestId } = renderApp();
+  renderApp();
 
   expect(screen.getByText(/Contact Application/i)).toBeInTheDocument();
   expect(useFetchContacts).toHaveBeenCalledTimes(1);
-  expect(getByTestId("spinner")).toBeInTheDocument();
+  expect(screen.getByTestId("spinner")).toBeInTheDocument();
 });
 
 test("renders error when unable to fetch queries", () => {

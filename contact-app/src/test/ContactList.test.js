@@ -15,12 +15,17 @@ const renderList = () =>
   );
 
 test("renders and shows all embedded fields", () => {
-  const { getByTestId } = renderList();
+  renderList();
   const heading = screen.getByText(/Our contact list/i);
   expect(heading).toBeInTheDocument();
-  expect(getByTestId("addButton")).toHaveTextContent("Add Contact");
-  expect(getByTestId("contactName")).toHaveTextContent("Hello Factorial");
-  fireEvent.click(screen.getByText("Hello Factorial"));
+  expect(screen.getByTestId("addButton")).toHaveTextContent("Add Contact");
+  expect(screen.getByTestId("contact-name")).toHaveTextContent(
+    "Hello Factorial"
+  );
+  expect(screen.getByText("Hello Factorial").closest("a")).toHaveAttribute(
+    "href",
+    `/contact/${data[0].id}`
+  );
 });
 
 test("renders the add form to add new contact on add button click", () => {

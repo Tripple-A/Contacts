@@ -12,15 +12,18 @@ import Form from "../ContactForm";
 const Details = ({ getContact, location }) => {
   const { id } = useParams();
   const [edit, setEdit] = useState(false);
-  const { isSuccess, mutate } = useDeleteContact();
+  const showForm = () => setEdit(true);
+  const hideForm = () => setEdit(false);
   const contact = location ? location.contact : getContact(id);
+  const { isSuccess, mutate } = useDeleteContact();
+  const saveContact = useUpdateContact();
   const { isLoading, error, data } = useFetchHistory(id);
   const history = data?.data;
   const dateSeperator = (date) => {
-    let editDate = date.split(/[\TZ,]+/);
+    const editDate = date.split(/[\TZ,]+/);
     return `${editDate[0]} at ${editDate[1]}`;
   };
-  const saveContact = useUpdateContact();
+
   const updates = (audit) => {
     return Object.entries(audit).map(([key, value]) => {
       return (
@@ -45,7 +48,7 @@ const Details = ({ getContact, location }) => {
   return (
     <div className="container">
       <div className="text-center">
-        <button data-testid="edit-button" onClick={() => setEdit(true)}>
+        <button data-testid="edit-button" onClick={showForm}>
           Edit
         </button>
         <button data-testid="delete-button" onClick={deleteContact}>
@@ -57,7 +60,7 @@ const Details = ({ getContact, location }) => {
       {edit && (
         <Form
           current={contact}
-          hideForm={() => setEdit(false)}
+          hideForm={hideForm}
           edit
           saveContact={saveContact}
         />

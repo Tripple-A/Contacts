@@ -28,7 +28,7 @@ const List = ({ data }) => {
             to={{ pathname: `/contact/${contact.id}`, contact: contact }}
             key={contact.id}
           >
-            <p data-testid="contactName">
+            <p data-testid="contact-name">
               {contact.first_name} {contact.last_name}
             </p>
           </Link>

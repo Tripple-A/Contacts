@@ -13,40 +13,34 @@ const useFetchContacts = () => {
 };
 
 const useFetchHistory = (id) => {
-  const { data, error, isLoading } = useQuery("fetchHistory", () =>
-    fetchHistory(id)
-  );
-  return { data, error, isLoading };
+  return useQuery("fetchHistory", () => fetchHistory(id));
 };
 
 const useSaveContact = () => {
   const queryClient = useQueryClient();
-  const { isSuccess, error, isError, mutate } = useMutation(saveContact, {
+  return useMutation(saveContact, {
     onSuccess: () => {
       queryClient.invalidateQueries("fetchContacts");
     },
   });
-  return { isSuccess, error, isError, mutate };
 };
 
 const useUpdateContact = () => {
   const queryClient = useQueryClient();
-  const { isSuccess, error, isError, mutate } = useMutation(editContact, {
+  return useMutation(editContact, {
     onSuccess: () => {
       queryClient.invalidateQueries();
     },
   });
-  return { isSuccess, error, isError, mutate };
 };
 
 const useDeleteContact = () => {
   const queryClient = useQueryClient();
-  const { isSuccess, error, isError, mutate } = useMutation(deleteContact, {
+  return useMutation(deleteContact, {
     onSuccess: () => {
       queryClient.invalidateQueries("fetchContacts");
     },
   });
-  return { isSuccess, error, isError, mutate };
 };
 
 export {
