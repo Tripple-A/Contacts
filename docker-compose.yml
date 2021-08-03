@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres:/var/lib/postgresql/data
+  api:
+    build: ./contact-api
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails s -p 5000 -b '0.0.0.0'"
+    volumes:
+      - ./contact-api:/app
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+  web:
+    build: ./contact-app
+    ports: 
+      - 3001:3001
+    volumes: 
+      - ./contact-app:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+volumes:
+  postgres:
+  node_modules:
