@@ -19,7 +19,7 @@ const Details = ({ getContact, location }) => {
   const contact = location ? location.contact : getContact(id);
   const { isSuccess, mutate } = useDeleteContact();
   const saveContact = useUpdateContact();
-  const { isLoading, error, data, isFetching } = useFetchHistory(id);
+  const { isLoading, error, data } = useFetchHistory(id);
   const dateSeperator = (date) => {
     const editDate = date.split(/[TZ]+/);
     return `${editDate[0]} at ${editDate[1]}`;
@@ -67,7 +67,7 @@ const Details = ({ getContact, location }) => {
       <div className="text-left d-flex">
         <div className="mx-auto p-2 text-center">
           <h5> Edit History</h5>
-          {(isLoading || isFetching) && <Spinner animation="border" />}
+          {isLoading && <Spinner animation="border" />}
           {error && <h3>There was an error loading the history</h3>}
           {data && (
             <div>
