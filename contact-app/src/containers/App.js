@@ -12,11 +12,11 @@ const App = () => {
 
   return (
     <Router>
-      <div className="container">
+      <div className="container text-center">
         <div className="jumbotron jumbotron-fluid bg-dark text-white mb-3">
-          <div className="container d-flex">
+          <div className="container">
             <h1 className="display-4">Contact Application</h1>
-            <p className="lead">
+            <p className="lead p-2">
               Store, modify, delete and view the edit history of your contacts.{" "}
             </p>
           </div>
@@ -35,7 +35,6 @@ const App = () => {
             exact
             render={() => <Details getContact={getContact} />}
           />
-          ;
         </Switch>
       )}
     </Router>

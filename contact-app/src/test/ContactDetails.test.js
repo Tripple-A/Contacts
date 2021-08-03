@@ -39,7 +39,7 @@ test("uses the getContact fxn and route id to fetch contact", () => {
 
 test("renders and shows all embedded text when location params are provided", () => {
   useDeleteContact.mockImplementation(() => ({ isLoading: true }));
-  useFetchHistory.mockImplementation(() => ({ data: { data: [] } }));
+  useFetchHistory.mockImplementation(() => ({ data: [] }));
 
   renderDetails(
     <Details location={{ contact: data }} getContact={getContact} />

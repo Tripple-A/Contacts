@@ -10,6 +10,7 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
     phoneNumber: current?.phone_number || "",
   });
   const { firstName, lastName, email, phoneNumber } = details;
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
@@ -37,7 +38,7 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
     <div>
       {isSuccess && doHideForm()}
       {isError && <Error data={error.response.data} />}
-      <form className="row g-3 needs-validation" novalidate onSubmit={save}>
+      <form className="row g-3 needs-validation" onSubmit={save}>
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
           <input
             id="firstName"
@@ -97,6 +98,13 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
       </form>
     </div>
   );
+};
+
+Form.propTypes = {
+  saveContact: PropTypes.object.isRequired,
+  hideForm: PropTypes.func.isRequired,
+  current: PropTypes.object,
+  edit: PropTypes.bool,
 };
 
 export default Form;

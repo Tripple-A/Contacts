@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
+import PropTypes from "prop-types";
 import {
   useDeleteContact,
   useFetchHistory,
@@ -8,6 +9,7 @@ import {
 import Spinner from "react-bootstrap/Spinner";
 import { Link, Redirect } from "react-router-dom";
 import Form from "../ContactForm";
+import { Button } from "react-bootstrap";
 
 const Details = ({ getContact, location }) => {
   const { id } = useParams();
@@ -17,12 +19,11 @@ const Details = ({ getContact, location }) => {
   const contact = location ? location.contact : getContact(id);
   const { isSuccess, mutate } = useDeleteContact();
   const saveContact = useUpdateContact();
-  const { isLoading, error, data } = useFetchHistory(id);
+  const { isLoading, error, data, isFetching } = useFetchHistory(id);
   const dateSeperator = (date) => {
-    const editDate = date.split(/[\TZ,]+/);
+    const editDate = date.split(/[TZ,]+/);
     return `${editDate[0]} at ${editDate[1]}`;
   };
-
   const updates = (audit) => {
     return Object.entries(audit).map(([key, value]) => {
       return (
@@ -47,8 +48,10 @@ const Details = ({ getContact, location }) => {
   return (
     <div className="container">
       <div className="text-center">
-        <button onClick={showForm}>Edit</button>
-        <button onClick={deleteContact}>Delete</button>
+        <Button onClick={showForm}>Edit</Button>
+        <Button onClick={deleteContact} className="m-2">
+          Delete
+        </Button>
         <Link to="/">Home</Link>
         {isSuccess && <Redirect to="/" />}
       </div>
@@ -62,16 +65,19 @@ const Details = ({ getContact, location }) => {
       )}
 
       <div className="text-left d-flex">
-        <div className="mx-auto" style={{ border: "1px solid black" }}>
+        <div
+          className="mx-auto p-2 text-center"
+          style={{ border: "1px solid black" }}
+        >
           <h5> Edit History</h5>
-          {isLoading && <Spinner animation="border" />}
+          {(isLoading || isFetching) && <Spinner animation="border" />}
           {error && <h3>There was an error loading the history</h3>}
           {data && (
             <div>
               {!data.length && <h6>No edit history yet</h6>}
 
               {data.map((audit) => (
-                <div>
+                <div className="border-bottom">
                   {updates(audit.audited_changes)}
                   <p>Date: {dateSeperator(audit.created_at)}</p>
                 </div>
@@ -79,7 +85,7 @@ const Details = ({ getContact, location }) => {
             </div>
           )}
         </div>
-        <div className="mx-auto">
+        <div className="mx-auto p-2">
           <h5>Contact Details</h5>
           <h6>First name: {contact.first_name} </h6>
           <h6>Last name: {contact.last_name} </h6>
@@ -89,6 +95,11 @@ const Details = ({ getContact, location }) => {
       </div>
     </div>
   );
+};
+
+Details.propTypes = {
+  getContact: PropTypes.func,
+  location: PropTypes.object,
 };
 
 export default Details;

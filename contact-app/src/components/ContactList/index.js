@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "react-bootstrap";
+import PropTypes from "prop-types";
 import Form from "../ContactForm";
 import { useSaveContact } from "../../hooks";
 
@@ -32,6 +33,10 @@ const List = ({ data }) => {
       </div>
     </div>
   );
+};
+
+List.propTypes = {
+  data: PropTypes.array.isRequired,
 };
 
 export default List;

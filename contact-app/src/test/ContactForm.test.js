@@ -4,13 +4,19 @@ import Form from "../components/ContactForm";
 
 const queryClient = new QueryClient();
 const handleSubmit = jest.fn();
-
-test("it renders without crashing", () => {
-  const { getByTestId } = render(
+const hideForm = jest.fn();
+const renderForm = () =>
+  render(
     <QueryClientProvider client={queryClient}>
-      <Form saveContact={{ mutate: handleSubmit }} />
+      <Form
+        saveContact={{ mutate: handleSubmit, reset: jest.fn() }}
+        hideForm={hideForm}
+      />
     </QueryClientProvider>
   );
+
+test("it renders without crashing", () => {
+  renderForm();
 
   expect(screen.getByPlaceholderText("First name")).toBeInTheDocument();
   expect(screen.getByPlaceholderText("Last name")).toBeInTheDocument();
@@ -20,11 +26,7 @@ test("it renders without crashing", () => {
 });
 
 test("the form fields update on user type event and submits successfully", async () => {
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Form saveContact={{ mutate: handleSubmit }} />
-    </QueryClientProvider>
-  );
+  renderForm();
 
   const firstName = screen.getByPlaceholderText("First name");
   fireEvent.change(firstName, { target: { value: "Software" } });
@@ -58,7 +60,7 @@ test("the form fields update on user type event and submits successfully", async
 test("save button shows the update text when edit prop is passed", () => {
   render(
     <QueryClientProvider client={queryClient}>
-      <Form saveContact={{ mutate: handleSubmit }} edit />
+      <Form saveContact={{ mutate: handleSubmit }} edit hideForm={jest.fn()} />
     </QueryClientProvider>
   );
 
@@ -67,16 +69,18 @@ test("save button shows the update text when edit prop is passed", () => {
 });
 
 test("form will not submit if all fields are not filled", () => {
-  render(
-    <QueryClientProvider client={queryClient}>
-      <Form saveContact={{ mutate: handleSubmit }} />
-    </QueryClientProvider>
-  );
-
+  renderForm();
   const email = screen.getByPlaceholderText("Email");
   fireEvent.change(email, { target: { value: "soft@dev.com" } });
   expect(email.value).toBe("soft@dev.com");
   const saveButton = screen.getByRole("button", { name: /save/i });
   fireEvent.click(saveButton);
   expect(handleSubmit).not.toHaveBeenCalled;
+});
+
+test("clicking cancel calls the hideForm function", () => {
+  renderForm();
+  const cancelButton = screen.getByRole("button", { name: /cancel/i });
+  fireEvent.click(cancelButton);
+  expect(hideForm).not.toHaveBeenCalled;
 });

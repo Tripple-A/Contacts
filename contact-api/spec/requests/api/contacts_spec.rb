@@ -34,7 +34,7 @@ RSpec.describe 'Api::Contacts', type: :request do
   describe 'GET#show' do
     context 'when contact exists' do
       before { get api_contact_path(contact) }
-      it 'returns valid when id is valid' do
+      it 'returns the contact' do
         expect(response).to have_http_status(:success)
         expect(response.body).to eq(serialized)
       end
@@ -42,7 +42,7 @@ RSpec.describe 'Api::Contacts', type: :request do
 
     context 'when contact does not exist' do
       before { get :"/api/contacts/100" }
-      it 'returns valid when id is valid' do
+      it 'returns an error ' do
         expect(response).to have_http_status(:not_found)
         expect(json_error(response)).to eq('No such contact')
       end

@@ -36,9 +36,7 @@ test("renders error when unable to fetch queries", () => {
 
 test("renders contacts after being fetched", () => {
   useFetchContacts.mockImplementation(() => ({
-    data: {
-      data: [{ id: 1, first_name: "Hello", last_name: "You" }],
-    },
+    data: [{ id: 1, first_name: "Hello", last_name: "You" }],
   }));
   renderApp();
 
