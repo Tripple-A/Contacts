@@ -8,66 +8,57 @@ import {
 } from "../../hooks";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, Redirect } from "react-router-dom";
+import { dateSeparator, updates } from "../../helpers";
 import Form from "../ContactForm";
 import { Button } from "react-bootstrap";
 
-const Details = ({ getContact, location }) => {
+const Details = ({ getContact }) => {
   const { id } = useParams();
+  const contact = getContact(id);
   const [edit, setEdit] = useState(false);
   const showForm = () => setEdit(true);
   const hideForm = () => setEdit(false);
-  const contact = location ? location.contact : getContact(id);
-  const { isSuccess, mutate } = useDeleteContact();
-  const saveContact = useUpdateContact();
+  const deleteContact = useDeleteContact();
+  const updateContact = useUpdateContact();
   const { isLoading, error, data } = useFetchHistory(id);
-  const dateSeperator = (date) => {
-    const editDate = date.split(/[TZ]+/);
-    return `${editDate[0]} at ${editDate[1]}`;
-  };
-  const updates = (audit) => {
-    return Object.entries(audit).map(([key, value]) => {
-      return (
-        <div>
-          <p>
-            {key}: From {value[0]} to {value[1]}
-          </p>
-        </div>
-      );
-    });
-  };
 
-  const deleteContact = () => {
+  const doDelete = () => {
     const ans = window.confirm("Are you sure");
-    if (ans) mutate(id);
+    if (ans) deleteContact.mutate(id);
   };
 
   if (!contact) {
-    return <div>No such contact exists</div>;
+    return (
+      <div className="mx-auto text-center">
+        <Link to="/">Home</Link>
+        <h3>No such contact exists</h3>
+      </div>
+    );
   }
 
   return (
     <div className="container">
       <div className="text-center">
         <Button onClick={showForm}>Edit</Button>
-        <Button onClick={deleteContact} className="m-2">
+        <Button onClick={doDelete} className="m-2">
           Delete
         </Button>
         <Link to="/">Home</Link>
-        {isSuccess && <Redirect to="/" />}
+        {deleteContact.isSuccess && <Redirect to="/" />}
       </div>
       {edit && (
         <Form
           current={contact}
           hideForm={hideForm}
           edit
-          saveContact={saveContact}
+          saveContact={updateContact}
         />
       )}
 
       <div className="text-left d-flex">
         <div className="mx-auto p-2 text-center">
           <h5> Edit History</h5>
-          {isLoading && <Spinner animation="border" />}
+          {isLoading && <Spinner data-testid="spinner" animation="border" />}
           {error && <h3>There was an error loading the history</h3>}
           {data && (
             <div>
@@ -76,7 +67,7 @@ const Details = ({ getContact, location }) => {
               {data.map((audit) => (
                 <div className="border-bottom">
                   {updates(audit.audited_changes)}
-                  <p>Date: {dateSeperator(audit.created_at)}</p>
+                  <p>Date: {dateSeparator(audit.created_at)}</p>
                 </div>
               ))}
             </div>
@@ -96,7 +87,6 @@ const Details = ({ getContact, location }) => {
 
 Details.propTypes = {
   getContact: PropTypes.func,
-  location: PropTypes.object,
 };
 
 export default Details;

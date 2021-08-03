@@ -21,10 +21,7 @@ const List = ({ data }) => {
 
       <div>
         {data.map((contact) => (
-          <Link
-            to={{ pathname: `/contact/${contact.id}`, contact: contact }}
-            key={contact.id}
-          >
+          <Link to={`/contact/${contact.id}`} key={contact.id}>
             <p data-testid="contact-name">
               {contact.first_name} {contact.last_name}
             </p>
