@@ -19,3 +19,5 @@ docker-compose run api rspec
 ```
 
 ## Look and Feel
+
+![screen-recording (29)](https://user-images.githubusercontent.com/52589264/128068306-af708b3e-ae61-4b8a-bf95-626fce28d67b.gif)
