@@ -34,7 +34,7 @@ module Api
       if @contact.destroy
         render json: {}, status: 204
       else
-        render json: { error: 'Not deleted' }, status: 400
+        render json: { error: @contact.errors }, status: 400
       end
     end
 

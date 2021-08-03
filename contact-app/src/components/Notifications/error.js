@@ -2,9 +2,9 @@ import React from "react";
 
 const Error = ({ data }) => {
   const showErrors = (message) => {
-    return Object.entries(message).map(([key, value]) => {
+    return Object.entries(message).map(([key, value], i) => {
       return (
-        <div>
+        <div key={i}>
           <p>
             The {key} {value[0]}
           </p>
