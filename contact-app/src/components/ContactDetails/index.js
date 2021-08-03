@@ -48,12 +48,8 @@ const Details = ({ getContact, location }) => {
   return (
     <div className="container">
       <div className="text-center">
-        <button data-testid="edit-button" onClick={showForm}>
-          Edit
-        </button>
-        <button data-testid="delete-button" onClick={deleteContact}>
-          Delete
-        </button>
+        <button onClick={showForm}>Edit</button>
+        <button onClick={deleteContact}>Delete</button>
         <Link to="/">Home</Link>
         {isSuccess && <Redirect to="/" />}
       </div>

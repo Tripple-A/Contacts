@@ -10,11 +10,7 @@ const List = ({ data }) => {
   return (
     <div className="mx-auto text-center container">
       <h1>Our contact list</h1>
-      <Button
-        onClick={() => setShowForm(true)}
-        className="m-4"
-        data-testid="addButton"
-      >
+      <Button onClick={() => setShowForm(true)} className="m-4">
         {" "}
         Add Contact
       </Button>

@@ -41,7 +41,6 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
         <div className="form-group animate__animated animate__zoomIn form-row d-flex justify-content-around">
           <input
             id="firstName"
-            data-testid="firstname-field"
             name="firstName"
             placeholder="First name"
             className="form-control"
@@ -54,7 +53,6 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
           />
           <input
             id="lastName"
-            data-testid="lastname-field"
             name="lastName"
             placeholder="Last name"
             className="form-control"
@@ -67,7 +65,6 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
           />
           <input
             id="email"
-            data-testid="email-field"
             className="form-control"
             placeholder="Email"
             type="email"
@@ -78,7 +75,6 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
           />
           <input
             id="phoneNumber"
-            data-testid="phone-field"
             className="form-control"
             type="tel"
             placeholder="Phone number"
@@ -87,11 +83,7 @@ const Form = ({ current, hideForm, edit, saveContact }) => {
             onChange={handleChange}
             required
           />
-          <button
-            className="mr-2 btn btn-primary mt-2"
-            type="submit"
-            data-testid="save-button"
-          >
+          <button className="mr-2 btn btn-primary mt-2" type="submit">
             {edit ? "Update" : "Save"}
           </button>
           <button

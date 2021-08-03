@@ -18,7 +18,9 @@ test("renders and shows all embedded fields", () => {
   renderList();
   const heading = screen.getByText(/Our contact list/i);
   expect(heading).toBeInTheDocument();
-  expect(screen.getByTestId("addButton")).toHaveTextContent("Add Contact");
+  expect(
+    screen.getByRole("button", { name: /add contact/i })
+  ).toHaveTextContent("Add Contact");
   expect(screen.getByTestId("contact-name")).toHaveTextContent(
     "Hello Factorial"
   );
@@ -29,11 +31,11 @@ test("renders and shows all embedded fields", () => {
 });
 
 test("renders the add form to add new contact on add button click", () => {
-  const { getByTestId } = renderList();
-  const addButton = getByTestId("addButton");
+  renderList();
+  const addButton = screen.getByRole("button", { name: /add contact/i });
   fireEvent.click(addButton);
-  expect(getByTestId("firstname-field")).toBeInTheDocument();
-  expect(getByTestId("lastname-field")).toBeInTheDocument();
-  expect(getByTestId("email-field")).toBeInTheDocument();
-  expect(getByTestId("phone-field")).toBeInTheDocument();
+  expect(screen.getByPlaceholderText("First name")).toBeInTheDocument();
+  expect(screen.getByPlaceholderText("Last name")).toBeInTheDocument();
+  expect(screen.getByPlaceholderText("Email")).toBeInTheDocument();
+  expect(screen.getByPlaceholderText("Phone number")).toBeInTheDocument();
 });
