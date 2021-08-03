@@ -21,7 +21,7 @@ const Details = ({ getContact, location }) => {
   const saveContact = useUpdateContact();
   const { isLoading, error, data, isFetching } = useFetchHistory(id);
   const dateSeperator = (date) => {
-    const editDate = date.split(/[TZ,]+/);
+    const editDate = date.split(/[TZ]+/);
     return `${editDate[0]} at ${editDate[1]}`;
   };
   const updates = (audit) => {
@@ -65,10 +65,7 @@ const Details = ({ getContact, location }) => {
       )}
 
       <div className="text-left d-flex">
-        <div
-          className="mx-auto p-2 text-center"
-          style={{ border: "1px solid black" }}
-        >
+        <div className="mx-auto p-2 text-center">
           <h5> Edit History</h5>
           {(isLoading || isFetching) && <Spinner animation="border" />}
           {error && <h3>There was an error loading the history</h3>}

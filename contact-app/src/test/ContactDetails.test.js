@@ -57,10 +57,11 @@ test("shows edit form containing contact details and calls update function", () 
   useDeleteContact.mockImplementation(() => ({ isLoading: true }));
   useFetchHistory.mockImplementation(() => ({ isLoading: true }));
   useUpdateContact.mockImplementation(() => ({ mutate: jest.fn() }));
+
   renderDetails(<Details location={{ contact: data }} edit />);
   expect(screen.getByText(/First name: Hello/i)).toBeInTheDocument();
-  const editButton = screen.getByRole("button", { name: /edit/i });
   expect(useUpdateContact).toHaveBeenCalledTimes(1);
+  const editButton = screen.getByRole("button", { name: /edit/i });
   fireEvent.click(editButton);
   expect(useUpdateContact).toHaveBeenCalledTimes(2);
 });
@@ -69,6 +70,7 @@ test("it redirects to the Home Page after deleting a contact", () => {
   useDeleteContact.mockImplementation(() => ({ isSuccess: true }));
   useFetchHistory.mockImplementation(() => ({ isLoading: true }));
   useUpdateContact.mockImplementation(() => ({ mutate: jest.fn() }));
+
   renderDetails(<Details location={{ contact: data }} edit />);
   expect(screen.queryByText("First name")).toBeNull;
   expect(screen.queryByText("Edit History")).toBeNull;

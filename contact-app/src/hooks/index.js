@@ -12,7 +12,7 @@ const useFetchContacts = () => {
 };
 
 const useFetchHistory = (id) => {
-  return useQuery("fetchHistory", () => fetchHistory(id));
+  return useQuery("fetchHistory", () => fetchHistory(id), { cacheTime: 0 });
 };
 
 const useSaveContact = () => {

@@ -82,5 +82,5 @@ test("clicking cancel calls the hideForm function", () => {
   renderForm();
   const cancelButton = screen.getByRole("button", { name: /cancel/i });
   fireEvent.click(cancelButton);
-  expect(hideForm).not.toHaveBeenCalled;
+  expect(hideForm).toHaveBeenCalledTimes(1);
 });
