@@ -5,7 +5,7 @@ import {
   saveContact,
   editContact,
   deleteContact,
-} from "../api";
+} from "../services/api";
 
 const useFetchContacts = () => {
   return useQuery("fetchContacts", () => fetchContacts());

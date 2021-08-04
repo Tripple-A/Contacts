@@ -8,7 +8,7 @@ import {
 } from "../../hooks";
 import Spinner from "react-bootstrap/Spinner";
 import { Link, Redirect } from "react-router-dom";
-import { dateSeparator, updates } from "../../helpers";
+import { dateSeparator, updates } from "../../services/helpers";
 import Form from "../ContactForm";
 import { Button } from "react-bootstrap";
 
